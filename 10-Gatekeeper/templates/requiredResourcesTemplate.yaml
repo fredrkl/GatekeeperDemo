@@ -1,0 +1,40 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredresources
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredResources
+        listKind: K8sRequiredResourcesList
+        plural: k8sRequiredResources
+        singular: k8sRequiredResources
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package itds.requiredresources
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.template.spec.containers[_]
+          not container.resources.limits.memory
+          msg := sprintf("you are missing memory limits on: %v", [container.name])
+        }
+        
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.template.spec.containers[_]
+          not container.resources.limits.cpu
+          msg := sprintf("you are missing cpu limits on: %v", [container.name])
+        }
+        
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.template.spec.containers[_]
+          not container.resources.requests.cpu
+          msg := sprintf("you are missing cpu request on: %v", [container.name])
+        }
+        
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.template.spec.containers[_]
+          not container.resources.requests.memory
+          msg := sprintf("you are missing memory request on: %v", [container.name])
+        }

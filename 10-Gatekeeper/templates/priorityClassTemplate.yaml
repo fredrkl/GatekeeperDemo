@@ -1,0 +1,35 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredpriorityclass
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredPriorityClass
+        listKind: K8sRequiredPriorityClassList
+        plural: k8sRequiredClasses
+        singular: k8sRequiredPriorityClass
+      validation:
+        # Schema for the `parameters` field
+        openAPIV3Schema:
+          properties:
+            priorityclasses:
+              type: array
+              items: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package itds.priorityclass
+
+        violation[{"msg": msg}] {
+          not input.review.object.spec.template.spec.priorityClassName
+          msg := sprintf("you need to spesify one of the itds priority classes on: %v", [input.review.object.metadata.name])
+        }
+
+        violation[{"msg": msg}] {
+          class := input.review.object.spec.template.spec.priorityClassName
+          satisfied := [ismatch | currentclass = input.parameters.priorityclasses[_] ; ismatch = currentclass == class]
+          not any(satisfied)
+          msg := sprintf("you need to spesify one of the itds priority classes on: %v", [input.review.object.metadata.name])
+        }

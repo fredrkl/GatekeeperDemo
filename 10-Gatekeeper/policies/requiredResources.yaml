@@ -1,0 +1,20 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredResources
+metadata:
+  name: resources-must-be-set
+spec:
+  match:
+    excludedNamespaces:
+        - default
+        - gatekeeper-system
+        - ingresscontrollers
+        - kube-node-lease
+        - kube-public
+        - kube-system
+        - linkerd
+        - monitor
+        - grafana
+        - cert-manager
+    kinds:
+      - apiGroups: ["apps"]
+        kinds: ["Deployment"]

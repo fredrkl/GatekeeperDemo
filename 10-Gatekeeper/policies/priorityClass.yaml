@@ -1,0 +1,29 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredPriorityClass
+metadata:
+  name: priorityclass-must-be-set
+spec:
+  match:
+    excludedNamespaces:
+        - azure-policy
+        - default
+        - gatekeeper-system
+        - ingresscontrollers
+        - keda
+        - kube-node-lease
+        - kube-public
+        - kube-system
+        - linkerd
+        - monitor
+        - velero
+        - grafana
+        - cert-manager
+    kinds:
+      - apiGroups: ["apps"]
+        kinds: ["Deployment"]
+  parameters:
+    message: "All deployments must have a itds priority class set"
+    priorityclasses:
+      - "mission-critical"
+      - "normal"
+      - "not-important"

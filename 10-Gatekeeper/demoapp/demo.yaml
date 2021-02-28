@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demoapp
+  annotations:
+    linkerd.io/inject: enabled
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: demoapp
+  name: whoami
+  labels:
+    app: whoami
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+        - name: whoami
+          image: prakhar1989/static-site
+          ports:
+            - name: web
+              containerPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: whoamiservice
+  namespace: demoapp
+spec:
+  selector:
+    app: whoami
+  type: ClusterIP
+  ports:
+  - name: web
+    port:  80
+    targetPort: 80
