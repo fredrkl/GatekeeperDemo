@@ -26,4 +26,18 @@ In this demo we will access the Gatekeeper ui tool with:
 And then you can see the UI if you go to: http://127.0.0.1:8080/
 
 # Demo
-If you look at the  
+If you look in the policies folder you will find the templates for our 2 policies. The actual policies are using them with application spesific values, e.g, priorityClass.yaml which define the valid priority classes.
+
+Run the following commands to get the policies up and running:
+````
+> kubectl apply -f 10-Gatekeeper/templates
+> kubectl apply -f 10-Gatekeeper/policies
+````
+
+You will hopefully see the templates and policies in the UI that we set up earlier.
+
+If you now try to run
+````
+> kubectl apply -f 10-Gatekeeper/demoapp
+````
+you will get messages from the OPA letting you know how you are violating the policies and how you can correct it.

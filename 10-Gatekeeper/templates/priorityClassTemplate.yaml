@@ -24,12 +24,12 @@ spec:
 
         violation[{"msg": msg}] {
           not input.review.object.spec.template.spec.priorityClassName
-          msg := sprintf("you need to spesify one of the itds priority classes on: %v", [input.review.object.metadata.name])
+          msg := sprintf("you need to spesify one of the priority classes on: %v", [input.review.object.metadata.name])
         }
 
         violation[{"msg": msg}] {
           class := input.review.object.spec.template.spec.priorityClassName
           satisfied := [ismatch | currentclass = input.parameters.priorityclasses[_] ; ismatch = currentclass == class]
           not any(satisfied)
-          msg := sprintf("you need to spesify one of the itds priority classes on: %v", [input.review.object.metadata.name])
+          msg := sprintf("you need to spesify one of the priority classes on: %v", [input.review.object.metadata.name])
         }

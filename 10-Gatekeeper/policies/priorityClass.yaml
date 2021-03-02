@@ -22,7 +22,7 @@ spec:
       - apiGroups: ["apps"]
         kinds: ["Deployment"]
   parameters:
-    message: "All deployments must have a itds priority class set"
+    message: "All deployments must have a priority class set"
     priorityclasses:
       - "mission-critical"
       - "normal"
