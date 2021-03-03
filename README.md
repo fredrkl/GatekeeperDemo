@@ -3,6 +3,8 @@ This demo demonstrate how you can use the K8s admission controller to enforce po
 
 When you make a request to the K8s API server it goes through a series of steps. Some steps can be augmented. The steps are:
 ![Pipeline](/Images/API-Server-pipeline.png). What Open Policy Agent (OPA) is doing is to register itself as a part of the validating admission webhook. When you send a request to the API server it will eventually get to the validating admission webhook and sendt to the endpoints that are registered as a query, the OPA will answer yes/no based on its rules and data.
+![OPA](/Images/OpenPolicyAgent.png)
+
 
 To easily use OPA with its constraints and templates in K8s we can use the Gatekeeper project. It creates Custom Resource Definitions (CRDs) so you can create the constraints and templates just as you would create a regular K8s Deployment.
 
